@@ -166,12 +166,12 @@ class AppDialog(QtGui.QDialog):
                                        "No path!", 
                                        "This publish does not have a path associated!")
             return
-
-        # get the slashes right
-        local_path = local_path.replace(os.path.sep, "/")
         
         # call out to our hook for loading.
-        self._app.execute_hook("hook_load_file", file_path=local_path, shotgun_data=curr_selection.sg_data)
+        self._app.execute_hook("hook_add_file_to_scene", 
+                               engine_name=self.engine.name, 
+                               file_path=local_path, 
+                               shotgun_data=curr_selection.sg_data)
 
 
         
