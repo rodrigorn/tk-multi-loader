@@ -1,0 +1,59 @@
+#
+# Copyright (c) 2012 Shotgun Software, Inc
+# ----------------------------------------------------
+#
+# Metadata defining the behaviour and requirements for this app
+
+# expected fields in the configuration file for this app
+configuration:
+    menu_name:
+        type: str
+        default_value: "Load Objects..."
+        description: Name to appear on the menu.
+
+    sg_entity_types:
+        type: list
+        description: "List of Shotgun Entity Types to include in the listings."
+        default_value: [Shot]
+        values:
+            type: shotgun_entity_type
+
+    tank_types:
+        type: list
+        description: "List of Tank Types to include in the publish listings. Leaving the list
+                      empty will include all Tank Types."
+        allows_empty: True
+        values:
+            type: tank_type
+            
+    hook_load_file_maya:
+        type: hook
+        description: Called when a file is loaded into Maya. The file_path parameter will contain a path 
+                     to the file on disk to load and the shotgun_data parameter is a dictionary
+                     of associated shotgun data.
+        parameters: [file_path, shotgun_data]
+        default_value: maya_add_file_to_scene
+            
+    hook_load_file_nuke:
+        type: hook
+        description: Called when a file is loaded into Nuke. The file_path parameter will contain a path 
+                     to the file on disk to load and the shotgun_data parameter is a dictionary
+                     of associated shotgun data.
+        parameters: [file_path, shotgun_data]
+        default_value: motionbuilder_add_file_to_scene
+        
+    hook_load_file_motionbuilder:
+        type: hook
+        description: Called when a file is loaded into Motionbuilder. The file_path parameter will contain a path 
+                     to the file on disk to load and the shotgun_data parameter is a dictionary
+                     of associated shotgun data.
+        parameters: [file_path, shotgun_data]
+        default_value: nuke_add_file_to_scene
+
+# the engines that this app can operate in:
+supported_engines: [tk-nuke, tk-maya, tk-motionbuilder]
+
+
+# the Shotgun fields that this app needs in order to operate correctly
+requires_shotgun_fields:
+
