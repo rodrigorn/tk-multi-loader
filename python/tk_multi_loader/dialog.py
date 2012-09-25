@@ -60,7 +60,7 @@ class AppDialog(QtGui.QDialog):
         try:            
             type_key = "%s/curr_entity_type" % self._app.get_setting("menu_name")
             id_key = "%s/curr_entity_id" % self._app.get_setting("menu_name")
-            entity_id = self._settings.value(id_key).toInt()
+            entity_id = self._settings.value(id_key)
             entity_type = str(self._settings.value(type_key))
             prev_selection = {"type": entity_type, "id": entity_id}
         except Exception, e:
@@ -169,7 +169,7 @@ class AppDialog(QtGui.QDialog):
         
         # call out to our hook for loading.
         self._app.execute_hook("hook_add_file_to_scene", 
-                               engine_name=self.engine.name, 
+                               engine_name=self._app.engine.name, 
                                file_path=local_path, 
                                shotgun_data=curr_selection.sg_data)
 
