@@ -22,7 +22,10 @@ class EntityBrowserWidget(BrowserWidget):
             
         previous_selection = data["prev_selection"]
             
-        types_to_load = self._app.get_setting("sg_entity_types", [])
+            
+        entity_cfg = self._app.get_setting("sg_entity_types", {})
+        # example: {"Shot": [["desc", "startswith", "foo"]] }        
+        types_to_load = entity_cfg.keys()
                     
         sg_data = []
 
@@ -30,9 +33,15 @@ class EntityBrowserWidget(BrowserWidget):
         for et in types_to_load:            
             item = {}
             item["type"] = et
-            item["data"] = self._app.shotgun.find(et, 
-                                                  [ ["project", "is", self._app.context.project] ], 
-                                                  ["code", "description", "image"])
+            
+            filters = []
+            # add any custom filters
+            filters.extend(entity_cfg[et])
+            # and project of course
+            filters.append(["project", "is", self._app.context.project])
+            
+            item["data"] = self._app.shotgun.find(et, filters, ["code", "description", "image"])
+            
             sg_data.append(item)
             
         

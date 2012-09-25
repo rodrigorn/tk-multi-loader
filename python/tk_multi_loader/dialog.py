@@ -28,7 +28,10 @@ class AppDialog(QtGui.QDialog):
         self.ui.right_browser.set_app(self._app)
 
         # set the browser labels        
-        types_to_load = self._app.get_setting("sg_entity_types", [])
+        entity_cfg = self._app.get_setting("sg_entity_types", {})
+        # example: {"Shot": [["desc", "startswith", "foo"]] }        
+        types_to_load = entity_cfg.keys()
+        
         plural_types = [ "%ss" % x for x in types_to_load] # no fanciness (sheep, box, nucleus etc)
         if len(plural_types) == 1:
             # "Shots"

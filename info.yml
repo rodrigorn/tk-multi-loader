@@ -9,14 +9,21 @@ configuration:
     menu_name:
         type: str
         default_value: "Load Objects..."
-        description: Name to appear on the menu.
+        description: Name to appear on the Tank menu.
 
     sg_entity_types:
-        type: list
-        description: "List of Shotgun Entity Types to include in the listings."
-        default_value: [Shot]
-        values:
-            type: shotgun_entity_type
+        type: dict
+        description: "Types of Shotgun entities to present in the left-most column in the browser.
+                      Typically these are Shots and Assets but could also be Mocap Takes, Elements
+                      or custom entities. The value should be organized as a dictionary, where the 
+                      key is the Entity Type and the value is a list of Shotgun filters that will be
+                      used when retrieving the list of items. If no filter is specified, all items
+                      will be loaded. For example, if you want to display only shots  
+                      that are in progress, set the value to 
+                      
+                      {'Shot': [['sg_status_list', 'is', 'ip']]}"
+                      
+        default_value: {"Shot": [] }
 
     tank_types:
         type: list
