@@ -9,11 +9,10 @@ different. See code comments for details.
 
 
 """
-
-from tank import Hook
+import tank
 import os
 
-class MayaAddFileToScene(Hook):
+class MayaAddFileToScene(tank.Hook):
     
     def execute(self, engine_name, file_path, shotgun_data, **kwargs):
         """
@@ -42,11 +41,27 @@ class MayaAddFileToScene(Hook):
         """
         
         import pymel.core as pm
+        import maya.cmds as cmds
         
         # get the slashes right
         file_path = file_path.replace(os.path.sep, "/")
         
-        pm.system.createReference(file_path)
+        (path, ext) = os.path.splitext(file_path)
+        
+        texture_extensions = [".png", ".jpg", ".jpeg", ".exr", ".cin", ".dpx",
+                              ".psd", ".tiff", ".tga"]
+        
+        if ext in [".ma", ".mb"]:
+            # maya file - load it as a reference
+            pm.system.createReference(file_path)
+            
+        if ext in texture_extensions:
+            # create a file texture read node
+            x = cmds.shadingNode('file', asTexture=True)
+            cmds.setAttr( "%s.fileTextureName" % x, file_path, type="string" )
+
+        else:
+            self.parent.log_error("Unsupported file extension! Nothing will be loaded.")
         
     def add_file_to_nuke(self, file_path, shotgun_data):
         """
@@ -61,8 +76,15 @@ class MayaAddFileToScene(Hook):
         # get the slashes right
         file_path = file_path.replace(os.path.sep, "/")
 
-        # create the read node
-        nuke.nodes.Read(file=file_path)        
+        (path, ext) = os.path.splitext(file_path)
+
+        valid_extensions = [".png", ".jpg", ".jpeg", ".exr", ".cin", ".dpx", ".tiff", ".mov"]
+
+        if ext in valid_extensions:
+            # create the read node
+            nuke.nodes.Read(file=file_path)
+        else:
+            self.parent.log_error("Unsupported file extension - no read node will be created.")        
 
 
 
@@ -77,5 +99,10 @@ class MayaAddFileToScene(Hook):
         # get the slashes right
         file_path = file_path.replace(os.path.sep, "/")
         
-        app = FBApplication()
-        app.FileMerge(file_path)
+        (path, ext) = os.path.splitext(file_path)
+        
+        if ext != ".fbx":
+            self.parent.log_error("Unsupported file extension. Only FBX files are supported.")
+        else:
+            app = FBApplication()
+            app.FileMerge(file_path)
