@@ -16,7 +16,7 @@ class MultiLoader(tank.platform.Application):
         """
         Called as the application is being initialized
         """
-        import tk_multi_loader
+        tk_multi_loader = self.import_module("tk_multi_loader")
         self.app_handler = tk_multi_loader.AppHandler(self)
         
         menu_caption = self.get_setting("menu_name")
