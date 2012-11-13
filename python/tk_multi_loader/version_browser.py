@@ -8,11 +8,10 @@ import sys
 import threading
 
 from PySide import QtCore, QtGui
-from .browser_widget import BrowserWidget
-from .browser_widget import ListItem
-from .browser_widget import ListHeader
 
-class VersionBrowserWidget(BrowserWidget):
+browser_widget = tank.platform.import_framework("tk-framework-widget", "browser_widget")
+
+class VersionBrowserWidget(browser_widget.BrowserWidget):
 
     
     def __init__(self, parent=None):
@@ -52,7 +51,207 @@ class VersionBrowserWidget(BrowserWidget):
 
         for d in result.get("data"):
             
-            i = self.add_item(ListItem)
+            i = self.add_item(
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+)
             if not selected:
                 self.select(i)
                 selected = True

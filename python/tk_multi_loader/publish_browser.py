@@ -8,11 +8,11 @@ import sys
 import threading
 
 from PySide import QtCore, QtGui
-from .browser_widget import BrowserWidget
-from .browser_widget import ListItem
-from .browser_widget import ListHeader
 
-class PublishBrowserWidget(BrowserWidget):
+browser_widget = tank.platform.import_framework("tk-framework-widget", "browser_widget")
+
+
+class PublishBrowserWidget(browser_widget.BrowserWidget):
 
     
     def __init__(self, parent=None):
@@ -121,10 +121,10 @@ class PublishBrowserWidget(BrowserWidget):
             return
 
         for item in sg_data:
-            i = self.add_item(ListHeader)
+            i = self.add_item(browser_widget.ListHeader)
             i.set_title(item["type"])
             for d in item["data"]:
-                i = self.add_item(ListItem)
+                i = self.add_item(browser_widget.ListItem)
                 
                 details = ("<b>%s</b><br>"
                            "<small><i>Latest publish %s</i></small><br>"
