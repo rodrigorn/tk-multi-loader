@@ -42,7 +42,17 @@ class AppDialog(QtGui.QDialog):
             types_str += " & %s" % plural_types[-1]
             
         self.ui.left_browser.set_label(types_str)
-        
+
+        # configure the "Show only current" checkbox
+        ctx_type = self._app.context.entity["type"] or None
+        self.ui.show_current_checkbox.stateChanged.connect(self.toggle_show_only_context)
+        self.ui.show_current_checkbox.setText("Show only current %s" % ctx_type)
+        if ctx_type is None or (ctx_type not in types_to_load):
+            # context entity is not in the list of entity types to display
+            # make sure the checkbox is cleared and hide it
+            self.ui.show_current_checkbox.setCheckState(QtCore.Qt.CheckState.Unchecked)
+            self.ui.show_current_checkbox.setVisible(False)
+
         self.ui.middle_browser.set_label("Publishes")
         self.ui.right_browser.set_label("Versions")
         
@@ -109,6 +119,14 @@ class AppDialog(QtGui.QDialog):
             self.ui.load_selected.setEnabled(False)
         else:
             self.ui.load_selected.setEnabled(True)
+
+    def toggle_show_only_context(self):
+        self.ui.left_browser.set_show_only_current(self.ui.show_current_checkbox.isChecked())
+        self.ui.left_browser.clear()
+        self.ui.middle_browser.clear()
+        self.ui.right_browser.clear()
+        d = { "prev_selection": self._app.context.entity}
+        self.ui.left_browser.load(d)
         
         
     def setup_entity_list(self, prev_selection): 

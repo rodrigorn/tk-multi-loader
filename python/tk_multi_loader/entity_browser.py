@@ -17,6 +17,7 @@ class EntityBrowserWidget(BrowserWidget):
     
     def __init__(self, parent=None):
         BrowserWidget.__init__(self, parent)
+        self.__show_only_current = False
 
     def get_data(self, data):
             
@@ -30,13 +31,22 @@ class EntityBrowserWidget(BrowserWidget):
         sg_data = []
 
         # load all entities
-        for et in types_to_load:            
+        for et in types_to_load:
+            # only load the context entity type if show only current is checked
+            if self.__show_only_current and (et != self._app.context.entity["type"]):
+                continue
+
             item = {}
             item["type"] = et
             
             filters = []
             # add any custom filters
             filters.extend(entity_cfg[et])
+
+            # and limit results to current is show only current is checked
+            if self.__show_only_current:
+                filters.append(["id", "is", self._app.context.entity["id"]])
+
             # and project of course
             filters.append(["project", "is", self._app.context.project])
             
@@ -79,4 +89,6 @@ class EntityBrowserWidget(BrowserWidget):
         if prev_selection_item:
             self.select(prev_selection_item)
             
-            
+    def set_show_only_current(self, value):
+        self.__show_only_current = value
+
