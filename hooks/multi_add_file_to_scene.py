@@ -12,7 +12,7 @@ different. See code comments for details.
 import tank
 import os
 
-class MayaAddFileToScene(tank.Hook):
+class AddFileToScene(tank.Hook):
     
     def execute(self, engine_name, file_path, shotgun_data, **kwargs):
         """
