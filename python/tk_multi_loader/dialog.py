@@ -44,14 +44,16 @@ class AppDialog(QtGui.QDialog):
         self.ui.left_browser.set_label(types_str)
 
         # configure the "Show only current" checkbox
-        ctx_type = self._app.context.entity["type"] or None
-        self.ui.show_current_checkbox.stateChanged.connect(self.toggle_show_only_context)
-        self.ui.show_current_checkbox.setText("Show only current %s" % ctx_type)
-        if ctx_type is None or (ctx_type not in types_to_load):
-            # context entity is not in the list of entity types to display
-            # make sure the checkbox is cleared and hide it
-            self.ui.show_current_checkbox.setCheckState(QtCore.Qt.CheckState.Unchecked)
+        if self._app.context.entity is None:
+            # only show checkbox if there is a entity present in the context
             self.ui.show_current_checkbox.setVisible(False)
+        elif self._app.context.entity.get("type") not in types_to_load:
+            # context entity is not in the list of entity types to display
+            self.ui.show_current_checkbox.setVisible(False)
+        else:
+            ctx_type = self._app.context.entity.get("type")
+            self.ui.show_current_checkbox.stateChanged.connect(self.toggle_show_only_context)
+            self.ui.show_current_checkbox.setText("Show only current %s" % ctx_type)
 
         self.ui.middle_browser.set_label("Publishes")
         self.ui.right_browser.set_label("Versions")

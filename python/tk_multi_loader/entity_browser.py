@@ -15,7 +15,7 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
 
     
     def __init__(self, parent=None):
-        BrowserWidget.__init__(self, parent)
+        browser_widget.BrowserWidget.__init__(self, parent)
         self.__show_only_current = False
 
     def get_data(self, data):

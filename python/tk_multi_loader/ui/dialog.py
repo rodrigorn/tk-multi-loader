@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dialog.ui'
 #
-# Created: Mon Dec 10 17:28:55 2012
-#      by: pyside-uic 0.2.13 running on PySide 1.1.1
+# Created: Mon Dec 17 11:56:20 2012
+#      by: pyside-uic 0.2.13 running on PySide 1.1.0
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -56,16 +56,15 @@ class Ui_Dialog(object):
         self.horizontalLayout_3 = QtGui.QHBoxLayout(self.frame)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem)
         self.show_current_checkbox = QtGui.QCheckBox(self.frame)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.show_current_checkbox.sizePolicy().hasHeightForWidth())
+        self.show_current_checkbox.setSizePolicy(sizePolicy)
         self.show_current_checkbox.setObjectName("show_current_checkbox")
         self.horizontalLayout_3.addWidget(self.show_current_checkbox)
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem1)
         self.horizontalLayout_2.addWidget(self.frame)
-        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem2)
         self.frame_2 = QtGui.QFrame(Dialog)
         self.frame_2.setFrameShape(QtGui.QFrame.NoFrame)
         self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
@@ -73,8 +72,8 @@ class Ui_Dialog(object):
         self.horizontalLayout_4 = QtGui.QHBoxLayout(self.frame_2)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem3)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem)
         self.pushButton = QtGui.QPushButton(self.frame_2)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_4.addWidget(self.pushButton)
