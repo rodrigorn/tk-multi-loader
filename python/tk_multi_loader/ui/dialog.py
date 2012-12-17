@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dialog.ui'
 #
-# Created: Thu Sep 20 14:58:23 2012
-#      by: pyside-uic 0.2.13 running on PySide 1.1.0
+# Created: Mon Dec 10 17:28:55 2012
+#      by: pyside-uic 0.2.13 running on PySide 1.1.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(1130, 571)
+        Dialog.resize(1050, 599)
         self.verticalLayout = QtGui.QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtGui.QHBoxLayout()
@@ -44,14 +44,44 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.frame = QtGui.QFrame(Dialog)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
+        self.frame.setSizePolicy(sizePolicy)
+        self.frame.setFrameShape(QtGui.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_3 = QtGui.QHBoxLayout(self.frame)
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem)
-        self.pushButton = QtGui.QPushButton(Dialog)
+        self.horizontalLayout_3.addItem(spacerItem)
+        self.show_current_checkbox = QtGui.QCheckBox(self.frame)
+        self.show_current_checkbox.setObjectName("show_current_checkbox")
+        self.horizontalLayout_3.addWidget(self.show_current_checkbox)
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem1)
+        self.horizontalLayout_2.addWidget(self.frame)
+        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem2)
+        self.frame_2 = QtGui.QFrame(Dialog)
+        self.frame_2.setFrameShape(QtGui.QFrame.NoFrame)
+        self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.horizontalLayout_4 = QtGui.QHBoxLayout(self.frame_2)
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem3)
+        self.pushButton = QtGui.QPushButton(self.frame_2)
         self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_2.addWidget(self.pushButton)
-        self.load_selected = QtGui.QPushButton(Dialog)
+        self.horizontalLayout_4.addWidget(self.pushButton)
+        self.load_selected = QtGui.QPushButton(self.frame_2)
         self.load_selected.setObjectName("load_selected")
-        self.horizontalLayout_2.addWidget(self.load_selected)
+        self.horizontalLayout_4.addWidget(self.load_selected)
+        self.horizontalLayout_2.addWidget(self.frame_2)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.retranslateUi(Dialog)
@@ -60,6 +90,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Load items into your scene", None, QtGui.QApplication.UnicodeUTF8))
+        self.show_current_checkbox.setText(QtGui.QApplication.translate("Dialog", "Show only current Entity", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Close", None, QtGui.QApplication.UnicodeUTF8))
         self.load_selected.setText(QtGui.QApplication.translate("Dialog", "Load Selected Item", None, QtGui.QApplication.UnicodeUTF8))
 
