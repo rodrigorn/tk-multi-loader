@@ -42,8 +42,9 @@ configuration:
         default_value: multi_add_file_to_scene
             
 
-# the engines that this app can operate in:
-supported_engines: [tk-nuke, tk-maya, tk-motionbuilder]
+# this app works in all engines - it does not contain 
+# any host application specific commands
+supported_engines: 
 
 
 # the Shotgun fields that this app needs in order to operate correctly
