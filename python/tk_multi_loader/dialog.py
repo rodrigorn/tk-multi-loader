@@ -194,6 +194,7 @@ class AppDialog(TankQDialog):
             return
         
         # call out to our hook for loading.
+        self._app.log_debug("Calling scene load hook for %s - %s" % (local_path, curr_selection.sg_data))
         self._app.execute_hook("hook_add_file_to_scene", 
                                engine_name=self._app.engine.name, 
                                file_path=local_path, 

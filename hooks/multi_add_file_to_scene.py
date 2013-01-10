@@ -18,14 +18,18 @@ class AddFileToScene(tank.Hook):
         """
         Hook entry point and app-specific code dispatcher
         """
-        if engine_name=="tk-maya":
+                
+        if engine_name == "tk-maya":
             self.add_file_to_maya(file_path, shotgun_data)
             
-        elif engine_name=="tk-nuke":
+        elif engine_name == "tk-nuke":
             self.add_file_to_nuke(file_path, shotgun_data)
             
-        elif engine_name=="tk-motionbuilder":
+        elif engine_name == "tk-motionbuilder":
             self.add_file_to_motionbuilder(file_path, shotgun_data)
+            
+        elif engine_name == "tk-3dsmax":
+            self.add_file_to_3dsmax(file_path, shotgun_data)
             
         else:
             raise Exception("Don't know how to load file into unknown engine %s" % engine_name)
@@ -86,8 +90,6 @@ class AddFileToScene(tank.Hook):
         else:
             self.parent.log_error("Unsupported file extension - no read node will be created.")        
 
-
-
     def add_file_to_motionbuilder(self, file_path, shotgun_data):
         """
         Load item into motionbuilder.
@@ -95,6 +97,10 @@ class AddFileToScene(tank.Hook):
         This will attempt to merge the loaded file with the scene.
         """
         from pyfbsdk import FBApplication
+
+        if not os.path.exists(file_path):
+            self.parent.log_error("The file %s does not exist." % file_path)
+            return
 
         # get the slashes right
         file_path = file_path.replace(os.path.sep, "/")
@@ -106,3 +112,16 @@ class AddFileToScene(tank.Hook):
         else:
             app = FBApplication()
             app.FileMerge(file_path)
+
+    def add_file_to_3dsmax(self, file_path, shotgun_data):
+        """
+        Load item into 3dsmax.
+        
+        This will attempt to merge the loaded file with the scene.
+        """
+        from Py3dsMax import mxs
+        if not os.path.exists(file_path):
+            self.parent.log_error("The file %s does not exist." % file_path)
+        else:
+            mxs.importFile(file_path)
+        
