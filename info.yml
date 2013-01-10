@@ -35,7 +35,7 @@ configuration:
             
     hook_add_file_to_scene:
         type: hook
-        description: Called when a file is loaded into Maya. The file_path parameter will contain a path 
+        description: Called when a file is loaded. The file_path parameter will contain a path 
                      to the file on disk to load and the shotgun_data parameter is a dictionary
                      of associated shotgun data.
         parameters: [engine_name, file_path, shotgun_data]
