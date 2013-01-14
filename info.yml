@@ -58,9 +58,10 @@ configuration:
                           [['created_by', 'is', '{context.user}']"
         values:
             type: shotgun_filter
-
-        allows_empty: True
             
+        allows_empty: True
+        default_value: []
+                    
     hook_add_file_to_scene:
         type: hook
         description: Called when a file is loaded. The file_path parameter will contain a path 
