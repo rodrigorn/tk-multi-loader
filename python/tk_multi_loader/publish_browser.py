@@ -24,12 +24,19 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
         current_entity = data["entity"]
 
         types_to_load = self._app.get_setting("tank_types", [])
+        filters = self._app.get_setting("publish_filters", [])
+
+        # resolve any template fields in the filters:
+        filters = self._app.resolve_filter_template_fields(filters)
+
+        # always limit to project and entity:
+        filters.extend([["project", "is", self._app.context.project],
+                        ["entity", "is", current_entity]])             
         
         if len(types_to_load) == 0:
             # get all publishes for this entity
             data = self._app.shotgun.find("TankPublishedFile", 
-                                          [ ["project", "is", self._app.context.project],
-                                            ["entity", "is", current_entity] ], 
+                                          filters, 
                                           ["description", 
                                            "version_number", 
                                            "image", 
@@ -59,8 +66,7 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
             
             
         else:
-            # get list of specific tank types
-            
+            # get list of specific tank types            
             for tank_type in types_to_load:            
                 item = {}
                 item["type"] = tank_type
@@ -73,18 +79,14 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
                     item["raw_data"] = []
                 else:
                     item["raw_data"] = self._app.shotgun.find("TankPublishedFile", 
-                                                              [ ["project", "is", self._app.context.project],
-                                                               ["entity", "is", current_entity],
-                                                               ["tank_type", "is", tank_type_entity ] ], 
+                                                              filters + [["tank_type", "is", tank_type_entity ]], 
                                                               ["description", 
                                                                "version_number", 
                                                                "image", 
                                                                "created_at",
                                                                "tank_type",
                                                                "name"])
-            
                 sg_data.append(item)
-            
             
         # now post process the list - we just want one item per "publish group"
         for item in sg_data:

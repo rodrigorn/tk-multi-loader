@@ -22,9 +22,8 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
             
         previous_selection = data["prev_selection"]
             
-            
         entity_cfg = self._app.get_setting("sg_entity_types", {})
-        # example: {"Shot": [["desc", "startswith", "foo"]] }        
+        # example: {"Shot": [["desc", "startswith", "foo"]] }  
         types_to_load = entity_cfg.keys()
                     
         sg_data = []
@@ -37,10 +36,16 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
 
             item = {}
             item["type"] = et
-            
             filters = []
+            
             # add any custom filters
-            filters.extend(entity_cfg[et])
+            entity_filters = entity_cfg[et]
+            
+            # resolve any template fields:
+            entity_filters = self._app.resolve_filter_template_fields(entity_filters)
+            
+            # add resolved filters to list of filters    
+            filters.extend(entity_filters)
 
             # and limit results to current is show only current is checked
             if self.__show_only_current:
