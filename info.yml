@@ -19,9 +19,23 @@ configuration:
                       key is the Entity Type and the value is a list of Shotgun filters that will be
                       used when retrieving the list of items. If no filter is specified, all items
                       will be loaded. For example, if you want to display only shots  
-                      that are in progress, set the value to 
+                      that are in progress, set the value to:
                       
-                      {'Shot': [['sg_status_list', 'is', 'ip']]}"
+                      	{'Shot': [['sg_status_list', 'is', 'ip']]}
+                      
+                      Properties from the context can also be used in the shotgun filters. Valid 
+                      properties are:
+                      
+                      	{context.entity}
+                      	{context.project}
+                      	{context.step}
+                      	{context.task}
+                      	{context.user}
+                      	
+                      For example, to show all shots belonging to the project in the current context, 
+                      set the value to: 
+                      
+                      	{'Shot' : [[project, is, '{context.project}']]}"
                       
         default_value: {"Shot": [] }
 
@@ -32,6 +46,18 @@ configuration:
         allows_empty: True
         values:
             type: tank_type
+            
+    publish_filters:
+    	type: list
+    	description: "List of additional shotgun filters to apply to the publish listings.  These
+    				  are in addition to filtering on current entity and any specified tank_types.
+    				  
+    				  Context properties can also be used in publish filters.  For example, to show
+    				  all publishes for the user in the current context, set the value to:
+    				  
+    				  	[[created_by, is, '{context.user}']"
+
+    	allows_empty: True
             
     hook_add_file_to_scene:
         type: hook
