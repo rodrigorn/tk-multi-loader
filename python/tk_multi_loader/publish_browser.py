@@ -7,7 +7,7 @@ import os
 import sys
 import threading
 
-from PySide import QtCore, QtGui
+from tank.platform.qt import QtCore, QtGui
 
 browser_widget = tank.platform.import_framework("tk-framework-widget", "browser_widget")
 
@@ -30,8 +30,7 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
         filters = self._app.resolve_filter_template_fields(filters)
 
         # always limit to project and entity:
-        filters.extend([["project", "is", self._app.context.project],
-                        ["entity", "is", current_entity]])             
+        filters.extend([["entity", "is", current_entity]])             
         
         if len(types_to_load) == 0:
             # get all publishes for this entity

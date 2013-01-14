@@ -17,12 +17,11 @@ class MultiLoader(tank.platform.Application):
         Called as the application is being initialized
         """
         tk_multi_loader = self.import_module("tk_multi_loader")
-        self.app_handler = tk_multi_loader.AppHandler(self)
-        
+        cb = lambda : tk_multi_loader.show_dialog(self)
         menu_caption = self.get_setting("menu_name")
         
         # add stuff to main menu
-        self.engine.register_command(menu_caption, self.app_handler.show_dialog)
+        self.engine.register_command(menu_caption, cb)
 
     def resolve_filter_template_fields(self, filters):
         """

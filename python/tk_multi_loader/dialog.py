@@ -7,19 +7,21 @@ import os
 import sys
 import threading
 
-from PySide import QtCore, QtGui
+from tank.platform.qt import QtCore, QtGui, TankQDialog
 from .ui.dialog import Ui_Dialog
 
-class AppDialog(QtGui.QDialog):
+class AppDialog(TankQDialog):
 
     
     def __init__(self, app):
-        QtGui.QDialog.__init__(self)
-        self._app = app
+        TankQDialog.__init__(self)
+        
         # set up the UI
         self.ui = Ui_Dialog() 
         self.ui.setupUi(self)
 
+        self._app = app
+        
         self._settings = QtCore.QSettings("Shotgun Software", "tk-multi-loader")
         
         # set up the browsers
@@ -99,15 +101,15 @@ class AppDialog(QtGui.QDialog):
         
     def accept(self):
         self._cleanup()
-        QtGui.QDialog.accept(self)
+        TankQDialog.accept(self)
         
     def reject(self):
         self._cleanup()
-        QtGui.QDialog.reject(self)
+        TankQDialog.reject(self)
         
     def done(self, status):
         self._cleanup()
-        QtGui.QDialog.done(self, status)
+        TankQDialog.done(self, status)
         
     ########################################################################################
     # basic business logic        
@@ -191,6 +193,7 @@ class AppDialog(QtGui.QDialog):
             return
         
         # call out to our hook for loading.
+        self._app.log_debug("Calling scene load hook for %s - %s" % (local_path, curr_selection.sg_data))
         self._app.execute_hook("hook_add_file_to_scene", 
                                engine_name=self._app.engine.name, 
                                file_path=local_path, 
