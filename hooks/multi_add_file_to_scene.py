@@ -59,13 +59,13 @@ class AddFileToScene(tank.Hook):
             # maya file - load it as a reference
             pm.system.createReference(file_path)
             
-        if ext in texture_extensions:
+        elif ext in texture_extensions:
             # create a file texture read node
             x = cmds.shadingNode('file', asTexture=True)
             cmds.setAttr( "%s.fileTextureName" % x, file_path, type="string" )
 
         else:
-            self.parent.log_error("Unsupported file extension! Nothing will be loaded.")
+            self.parent.log_error("Unsupported file extension for %s! Nothing will be loaded." % file_path)
         
     def add_file_to_nuke(self, file_path, shotgun_data):
         """
@@ -88,7 +88,7 @@ class AddFileToScene(tank.Hook):
             # create the read node
             nuke.nodes.Read(file=file_path)
         else:
-            self.parent.log_error("Unsupported file extension - no read node will be created.")        
+            self.parent.log_error("Unsupported file extension for %s - no read node will be created." % file_path)        
 
     def add_file_to_motionbuilder(self, file_path, shotgun_data):
         """
@@ -108,7 +108,7 @@ class AddFileToScene(tank.Hook):
         (path, ext) = os.path.splitext(file_path)
         
         if ext != ".fbx":
-            self.parent.log_error("Unsupported file extension. Only FBX files are supported.")
+            self.parent.log_error("Unsupported file extension for %s. Only FBX files are supported." % file_path)
         else:
             app = FBApplication()
             app.FileMerge(file_path)
