@@ -7,14 +7,14 @@ import os
 import sys
 import threading
 
-from tank.platform.qt import QtCore, QtGui, TankQDialog
+from tank.platform.qt import QtCore, QtGui
 from .ui.dialog import Ui_Dialog
 
-class AppDialog(TankQDialog):
+class AppDialog(QtGui.QWidget):
 
     
     def __init__(self, app):
-        TankQDialog.__init__(self)
+        QtGui.QWidget.__init__(self)
         
         # set up the UI
         self.ui = Ui_Dialog() 
@@ -62,6 +62,7 @@ class AppDialog(TankQDialog):
         
         self.toggle_load_button_enabled()
         self.ui.load_selected.clicked.connect( self.load_item )
+        self.ui.close.clicked.connect( self.close )
         
         self.ui.left_browser.selection_changed.connect( self.setup_publish_list )
         self.ui.middle_browser.selection_changed.connect( self.setup_version_list )
@@ -89,27 +90,12 @@ class AppDialog(TankQDialog):
     # make sure we trap when the dialog is closed so that we can shut down 
     # our threads. Nuke does not do proper cleanup on exit.
     
-    def _cleanup(self):
+    def closeEvent(self, event):
         self.ui.left_browser.destroy()
         self.ui.middle_browser.destroy()
         self.ui.right_browser.destroy()
-        
-    def closeEvent(self, event):
-        self._cleanup()
         # okay to close!
         event.accept()
-        
-    def accept(self):
-        self._cleanup()
-        TankQDialog.accept(self)
-        
-    def reject(self):
-        self._cleanup()
-        TankQDialog.reject(self)
-        
-    def done(self, status):
-        self._cleanup()
-        TankQDialog.done(self, status)
         
     ########################################################################################
     # basic business logic        

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dialog.ui'
 #
-# Created: Mon Dec 17 11:56:20 2012
+# Created: Mon Jan 21 00:25:09 2013
 #      by: pyside-uic 0.2.13 running on PySide 1.1.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,9 +74,9 @@ class Ui_Dialog(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem)
-        self.pushButton = QtGui.QPushButton(self.frame_2)
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_4.addWidget(self.pushButton)
+        self.close = QtGui.QPushButton(self.frame_2)
+        self.close.setObjectName("close")
+        self.horizontalLayout_4.addWidget(self.close)
         self.load_selected = QtGui.QPushButton(self.frame_2)
         self.load_selected.setObjectName("load_selected")
         self.horizontalLayout_4.addWidget(self.load_selected)
@@ -84,13 +84,12 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.retranslateUi(Dialog)
-        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("clicked()"), Dialog.accept)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Load items into your scene", None, QtGui.QApplication.UnicodeUTF8))
         self.show_current_checkbox.setText(QtGui.QApplication.translate("Dialog", "Show only current Entity", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Close", None, QtGui.QApplication.UnicodeUTF8))
+        self.close.setText(QtGui.QApplication.translate("Dialog", "Close", None, QtGui.QApplication.UnicodeUTF8))
         self.load_selected.setText(QtGui.QApplication.translate("Dialog", "Load Selected Item", None, QtGui.QApplication.UnicodeUTF8))
 
 from ..entity_browser import EntityBrowserWidget
