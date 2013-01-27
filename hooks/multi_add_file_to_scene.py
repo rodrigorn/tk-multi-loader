@@ -31,6 +31,9 @@ class AddFileToScene(tank.Hook):
         elif engine_name == "tk-3dsmax":
             self.add_file_to_3dsmax(file_path, shotgun_data)
             
+        elif engine_name == "tk-photoshop":
+            self.add_file_to_photoshop(file_path, shotgun_data)
+
         else:
             raise Exception("Don't know how to load file into unknown engine %s" % engine_name)
         
@@ -124,4 +127,12 @@ class AddFileToScene(tank.Hook):
             self.parent.log_error("The file %s does not exist." % file_path)
         else:
             mxs.importFile(file_path)
+        
+    def add_file_to_photoshop(self, file_path, shotgun_data):
+        """
+        Load item into Photoshop.        
+        """        
+        import photoshop        
+        f = photoshop.RemoteObject('flash.filesystem.File', file_path)
+        photoshop.app.load(f)        
         
