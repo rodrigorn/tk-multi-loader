@@ -185,6 +185,8 @@ class AppDialog(QtGui.QWidget):
                                file_path=local_path, 
                                shotgun_data=curr_selection.sg_data)
 
-
+        if self._app.get_setting("single_select", True):
+            # single select mode!
+            self.close()
         
         

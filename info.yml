@@ -11,6 +11,12 @@ configuration:
         default_value: "Load Objects..."
         description: Name to appear on the Tank menu.
 
+    single_select:
+        type: bool
+        default_value: true
+        description: If set to true, the loader dialog will close automatically once an
+                     item has been loaded.
+
     sg_entity_types:
         type: dict
         description: "Types of Shotgun entities to present in the left-most column in the browser.
