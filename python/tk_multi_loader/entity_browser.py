@@ -70,12 +70,14 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
         prev_selection_item = None
 
         for item in sg_data:
+            
             i = self.add_item(browser_widget.ListHeader)
-            i.set_title("%ss" % item["type"])
+            i.set_title("%ss" % tank.util.get_entity_type_display_name(self._app.tank, item.get("type")))
+            
             for d in item["data"]:
                 i = self.add_item(browser_widget.ListItem)
                 
-                details = "<b>%s %s</b><br>%s" % (d.get("type"), 
+                details = "<b>%s %s</b><br>%s" % (tank.util.get_entity_type_display_name(self._app.tank, d.get("type")), 
                                                   d.get("code"), 
                                                   d.get("description"))
                 
