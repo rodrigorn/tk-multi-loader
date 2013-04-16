@@ -21,11 +21,7 @@ class MultiLoader(tank.platform.Application):
         menu_caption = self.get_setting("menu_name")
         
         # add stuff to main menu
-        command_name = menu_caption.lower().replace(" ", "_")
-        if command_name.endswith("..."):
-            command_name = command_name[:-3]
-        
-        self.engine.register_command(command_name, cb, {"title": menu_caption})
+        self.engine.register_command(menu_caption, cb)
 
     def resolve_filter_template_fields(self, filters):
         """
