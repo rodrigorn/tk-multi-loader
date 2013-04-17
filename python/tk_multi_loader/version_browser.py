@@ -29,7 +29,7 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
             # get all publishes that are children of this publish
             
             data = self._app.shotgun.find("TankPublishedFile", 
-                                          [ ["downstream_tank_published_files", "is", current_publish ] ], 
+                                          [ ["upstream_tank_published_files", "is", current_publish ] ], 
                                           ["description", 
                                            "version_number", 
                                            "image", 
