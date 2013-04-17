@@ -17,6 +17,10 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
     def __init__(self, parent=None):
         browser_widget.BrowserWidget.__init__(self, parent)
         self.__show_only_current = False
+        
+        # cannot access self._app here so just initialize blank and populate in get_data
+        self._types_to_load = []
+
 
     def get_data(self, data):
             
@@ -24,12 +28,12 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
             
         entity_cfg = self._app.get_setting("sg_entity_types", {})
         # example: {"Shot": [["desc", "startswith", "foo"]] }  
-        types_to_load = entity_cfg.keys()
+        self._types_to_load = entity_cfg.keys()
                     
         sg_data = []
 
         # load all entities
-        for et in types_to_load:
+        for et in self._types_to_load:
             # only load the context entity type if show only current is checked
             if self.__show_only_current and (et != self._app.context.entity["type"]):
                 continue
@@ -71,8 +75,9 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
 
         for item in sg_data:
             
-            i = self.add_item(browser_widget.ListHeader)
-            i.set_title("%ss" % tank.util.get_entity_type_display_name(self._app.tank, item.get("type")))
+            if len(self._types_to_load) > 1:
+                i = self.add_item(browser_widget.ListHeader)
+                i.set_title("%ss" % tank.util.get_entity_type_display_name(self._app.tank, item.get("type")))
             
             for d in item["data"]:
                 i = self.add_item(browser_widget.ListItem)
