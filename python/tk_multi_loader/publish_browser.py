@@ -39,6 +39,7 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
                                           ["description", 
                                            "version_number", 
                                            "image", 
+                                           "entity",
                                            "created_at",
                                            "tank_type",
                                            "name"])
