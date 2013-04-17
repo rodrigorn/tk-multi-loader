@@ -25,21 +25,37 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
         publish_name = current_publish.get("name")
         publish_type = current_publish.get("tank_type")
 
-        # load publishes with the same name, entity and type 
-        data = self._app.shotgun.find("TankPublishedFile", 
-                                      [ ["project", "is", self._app.context.project],
-                                        ["entity", "is", current_entity],
-                                        ["tank_type", "is", publish_type],
-                                        ["name", "is", publish_name] ], 
-                                      ["description", 
-                                       "version_number", 
-                                       "image", 
-                                       "created_at",
-                                       "created_by",
-                                       "path",
-                                       "name"],
-                                      [{"field_name": "created_at", "direction": "desc"}]
-                                      )
+        if self._app.get_setting("dependency_mode"):
+            # get all publishes that are children of this publish
+            
+            data = self._app.shotgun.find("TankPublishedFile", 
+                                          [ ["downstream_tank_published_files", "is", current_publish ] ], 
+                                          ["description", 
+                                           "version_number", 
+                                           "image", 
+                                           "created_at",
+                                           "created_by",
+                                           "path",
+                                           "name"],
+                                          [{"field_name": "created_at", "direction": "desc"}]
+                                          )
+            
+        else:
+            # load publishes with the same name, entity and type 
+            data = self._app.shotgun.find("TankPublishedFile", 
+                                          [ ["project", "is", self._app.context.project],
+                                            ["entity", "is", current_entity],
+                                            ["tank_type", "is", publish_type],
+                                            ["name", "is", publish_name] ], 
+                                          ["description", 
+                                           "version_number", 
+                                           "image", 
+                                           "created_at",
+                                           "created_by",
+                                           "path",
+                                           "name"],
+                                          [{"field_name": "created_at", "direction": "desc"}]
+                                          )
         
             
         return {"data": data }

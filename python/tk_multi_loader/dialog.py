@@ -62,7 +62,11 @@ class AppDialog(QtGui.QWidget):
             self.ui.show_current_checkbox.setText("Show only current %s" % ctx_type)
 
         self.ui.middle_browser.set_label("Publishes")
-        self.ui.right_browser.set_label("Versions")
+        
+        if self._app.get_setting("dependency_mode"):
+            self.ui.right_browser.set_label("Contents")
+        else:
+            self.ui.right_browser.set_label("Versions")
         
         self.toggle_load_button_enabled()
         self.ui.load_selected.clicked.connect( self.load_item )

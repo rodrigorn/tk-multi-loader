@@ -11,6 +11,12 @@ configuration:
         default_value: "Load Objects..."
         description: Name to appear on the Tank menu.
 
+    dependency_mode:
+        type: bool
+        default_value: false
+        description: If enabled, the loader app will display versions in the middle pane
+                     and dependent files in the right most pane.
+
     single_select:
         type: bool
         default_value: true
@@ -97,5 +103,5 @@ requires_engine_version:
 
 # the frameworks required to run this app
 frameworks:
-    - {"name": "tk-framework-widget", "version": "v0.1.5"}
+    - {"name": "tk-framework-widget", "version": "v0.1.11"}
     
