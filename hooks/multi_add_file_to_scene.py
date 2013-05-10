@@ -88,10 +88,51 @@ class AddFileToScene(tank.Hook):
         valid_extensions = [".png", ".jpg", ".jpeg", ".exr", ".cin", ".dpx", ".tiff", ".mov"]
 
         if ext in valid_extensions:
+            # find the sequence range if it has one:
+            seq_range = self._find_sequence_range(file_path)
+            
             # create the read node
-            nuke.nodes.Read(file=file_path)
+            if seq_range:
+                nuke.nodes.Read(file=file_path, first=seq_range[0], last=seq_range[1])
+            else:
+                nuke.nodes.Read(file=file_path)
         else:
             self.parent.log_error("Unsupported file extension for %s - no read node will be created." % file_path)        
+
+    def _find_sequence_range(self, path):
+        """
+        If the path contains a sequence then try to match it
+        to a template and use that to extract the sequence range
+        based on the files that exist on disk.
+        """
+        # find a template that matches the path:
+        template = None
+        try:
+            template = self.parent.tank.template_from_path(path)
+        except TankError, e:
+            self.parent.log_error("Unable to find image sequence range!")
+        if not template:
+            return
+            
+        # get the fields and find all matching files:
+        fields = template.get_fields(path)
+        if not "SEQ" in fields:
+            return
+        files = self.parent.tank.paths_from_template(template, fields, ["SEQ", "eye"])
+        
+        # find frame numbers from these files:
+        frames = []
+        for file in files:
+            fields = template.get_fields(file)
+            frame = fields.get("SEQ")
+            if frame != None:
+                frames.append(frame)
+        if not frames:
+            return
+        
+        # return the range
+        return (min(frames), max(frames))
+
 
     def add_file_to_motionbuilder(self, file_path, shotgun_data):
         """
