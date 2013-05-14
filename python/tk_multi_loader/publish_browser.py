@@ -139,6 +139,10 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
             for d in item["data"]:
                 i = self.add_item(browser_widget.ListItem)
                 
+                desc = "No Comments"
+                if d.get("description") is not None:
+                     desc = d.get("description")
+                
                 if self._app.get_setting("dependency_mode"):
                     
                     # snow name and version
@@ -148,16 +152,14 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
                                        d.get("version_number"),
                                        d.get("created_by", {}).get("name"),
                                        d.get("created_at"), 
-                                       d.get("description", "No Comments")))
+                                       desc))
                 
                 else:
                 
                     # show just version
                     details = ("<b>%s</b><br>"
                                "<small><i>Latest publish %s</i></small><br>"
-                               "Latest change: %s" % (d.get("name"), 
-                                                     d.get("created_at"), 
-                                                     d.get("description")))
+                               "Latest change: %s" % (d.get("name"), d.get("created_at"), desc))
                 
                 i.set_details(details)
                 i.sg_data = d

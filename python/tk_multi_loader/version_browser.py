@@ -73,6 +73,10 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
                 self.select(i)
                 selected = True
             
+            desc = "No Comments"
+            if d.get("description") is not None:
+                 desc = d.get("description")
+            
             if self._app.get_setting("dependency_mode"):
                 
                 # show name and version
@@ -82,7 +86,7 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
                                    d.get("version_number"),
                                    d.get("created_by", {}).get("name"),
                                    d.get("created_at"), 
-                                   d.get("description", "No Comments")))
+                                   desc))
                 i.set_details(details)
             
             else:
@@ -92,7 +96,7 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
                 details.append("<b>Version %s</b>" % d.get("version_number") )
                 details.append("<i><small>%s, %s</small></i>" % (d.get("created_by", {}).get("name"), 
                                                                  d.get("created_at")) )
-                details.append("%s" % d.get("description", "No Comments") )
+                details.append(desc)
                 
                 i.set_details("<br>".join(details))
 
