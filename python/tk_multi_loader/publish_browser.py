@@ -13,7 +13,9 @@ browser_widget = tank.platform.import_framework("tk-framework-widget", "browser_
 
 
 class PublishBrowserWidget(browser_widget.BrowserWidget):
-
+    """
+    Middle pane
+    """
     
     def __init__(self, parent=None):
         browser_widget.BrowserWidget.__init__(self, parent)        

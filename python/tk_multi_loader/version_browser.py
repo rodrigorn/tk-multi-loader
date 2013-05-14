@@ -12,7 +12,9 @@ from tank.platform.qt import QtCore, QtGui
 browser_widget = tank.platform.import_framework("tk-framework-widget", "browser_widget")
 
 class VersionBrowserWidget(browser_widget.BrowserWidget):
-
+    """
+    Right Column
+    """
     
     def __init__(self, parent=None):
         browser_widget.BrowserWidget.__init__(self, parent)        
@@ -24,19 +26,24 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
         current_publish = data["publish"]
         publish_name = current_publish.get("name")
         publish_type = current_publish.get("tank_type")
+        
+        fields = [ "description", 
+                   "version_number", 
+                   "created_by",
+                   "image", 
+                   "entity",
+                   "created_at",
+                   "tank_type",
+                   "path",
+                   "name"]
+        
 
         if self._app.get_setting("dependency_mode"):
             # get all publishes that are children of this publish
             
             data = self._app.shotgun.find("TankPublishedFile", 
                                           [ ["upstream_tank_published_files", "is", current_publish ] ], 
-                                          ["description", 
-                                           "version_number", 
-                                           "image", 
-                                           "created_at",
-                                           "created_by",
-                                           "path",
-                                           "name"],
+                                          fields,
                                           [{"field_name": "created_at", "direction": "desc"}]
                                           )
             
@@ -47,13 +54,7 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
                                             ["entity", "is", current_entity],
                                             ["tank_type", "is", publish_type],
                                             ["name", "is", publish_name] ], 
-                                          ["description", 
-                                           "version_number", 
-                                           "image", 
-                                           "created_at",
-                                           "created_by",
-                                           "path",
-                                           "name"],
+                                          fields,
                                           [{"field_name": "created_at", "direction": "desc"}]
                                           )
         
@@ -72,13 +73,29 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
                 self.select(i)
                 selected = True
             
-            details = []
-            details.append("<b>Version %s</b>" % d.get("version_number") )
-            details.append("<i><small>%s, %s</small></i>" % (d.get("created_by", {}).get("name"), 
-                                                             d.get("created_at")) )
-            details.append("%s" % d.get("description", "No Comments") )
+            if self._app.get_setting("dependency_mode"):
+                
+                # show name and version
+                details = ("<b>%s v%s</b><br>"
+                           "<small><i>%s, %s</i></small><br>"
+                           "%s" % (d.get("name"), 
+                                   d.get("version_number"),
+                                   d.get("created_by", {}).get("name"),
+                                   d.get("created_at"), 
+                                   d.get("description", "No Comments")))
+                i.set_details(details)
             
-            i.set_details("<br>".join(details))
+            else:
+            
+                # show just name
+                details = []
+                details.append("<b>Version %s</b>" % d.get("version_number") )
+                details.append("<i><small>%s, %s</small></i>" % (d.get("created_by", {}).get("name"), 
+                                                                 d.get("created_at")) )
+                details.append("%s" % d.get("description", "No Comments") )
+                
+                i.set_details("<br>".join(details))
+
             i.sg_data = d
             if d.get("image"):
                 i.set_thumbnail(d.get("image"))                
