@@ -82,9 +82,12 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
             for d in item["data"]:
                 i = self.add_item(browser_widget.ListItem)
                 
+                description = d.get("description")
+                if description is None:
+                    description = "No Description"
+                
                 details = "<b>%s %s</b><br>%s" % (tank.util.get_entity_type_display_name(self._app.tank, d.get("type")), 
-                                                  d.get("code", "No Name"), 
-                                                  d.get("description", "No Description"))
+                                                  d.get("code"), description)
                 
                 i.set_details(details)
                 i.sg_data = d
