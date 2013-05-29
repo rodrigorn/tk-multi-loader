@@ -22,10 +22,19 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
 
     def get_data(self, data):
 
+        # get details about the published file entity:
+        published_file_entity_type = tank.util.get_published_file_entity_type(self._app.tank)
+        if published_file_entity_type == "TankPublishedFile":
+            published_file_type_field = "tank_type"
+            published_file_upstream_files_field = "upstream_tank_published_files"
+        elif published_file_entity_type == "PublishedFile":
+            published_file_type_field = "published_file_type"
+            published_file_upstream_files_field = "upstream_published_files"
+        
         current_entity = data["entity"]
         current_publish = data["publish"]
         publish_name = current_publish.get("name")
-        publish_type = current_publish.get("tank_type")
+        publish_type = current_publish.get(published_file_type_field)
         
         fields = [ "description", 
                    "version_number", 
@@ -33,29 +42,29 @@ class VersionBrowserWidget(browser_widget.BrowserWidget):
                    "image", 
                    "entity",
                    "created_at",
-                   "tank_type",
+                   published_file_type_field,
                    "path",
                    "name"]
-        
+
+        order_by = [{"field_name": "created_at", "direction": "desc"}]
 
         if self._app.get_setting("dependency_mode"):
             # get all publishes that are children of this publish
-            
-            data = self._app.shotgun.find("TankPublishedFile", 
-                                          [ ["upstream_tank_published_files", "is", current_publish ] ], 
+            data = self._app.shotgun.find(published_file_entity_type, 
+                                          [ [published_file_upstream_files_field, "is", current_publish ] ], 
                                           fields,
-                                          [{"field_name": "created_at", "direction": "desc"}]
+                                          order_by
                                           )
             
         else:
             # load publishes with the same name, entity and type 
-            data = self._app.shotgun.find("TankPublishedFile", 
+            data = self._app.shotgun.find(published_file_entity_type, 
                                           [ ["project", "is", self._app.context.project],
                                             ["entity", "is", current_entity],
-                                            ["tank_type", "is", publish_type],
+                                            [published_file_type_field, "is", publish_type],
                                             ["name", "is", publish_name] ], 
                                           fields,
-                                          [{"field_name": "created_at", "direction": "desc"}]
+                                          order_by
                                           )
         
             

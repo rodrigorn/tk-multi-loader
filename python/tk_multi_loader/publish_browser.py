@@ -36,6 +36,15 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
         
         order_by = [{"field_name": "name", "direction": "asc"},
                     {"field_name": "version_number", "direction": "desc"}]
+
+        # get details about the published file entity:
+        published_file_entity_type = tank.util.get_published_file_entity_type(self._app.tank)
+        if published_file_entity_type == "TankPublishedFile":
+            published_file_type_field = "tank_type"
+            published_file_type_entity_type = "TankType"
+        elif published_file_entity_type == "PublishedFile":
+            published_file_type_field = "published_file_type"
+            published_file_type_entity_type = "PublishedFileType"
         
         fields = [ "description", 
                    "version_number", 
@@ -43,49 +52,49 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
                    "image", 
                    "entity",
                    "created_at",
-                   "tank_type",
+                   published_file_type_field,
                    "name"]
-        
+
         if len(types_to_load) == 0:
             # get all publishes for this entity
-            data = self._app.shotgun.find("TankPublishedFile", filters, fields, order_by)
+            data = self._app.shotgun.find(published_file_entity_type, filters, fields, order_by)
                         
             # now group this into sections based on the tank type
-            tank_type_dict = {}
+            published_file_type_dict = {}
             for d in data:
-                tank_type_link = d.get("tank_type")
-                if tank_type_link is None:
-                    tank_type = "No type associated"
+                published_file_type_link = d.get(published_file_type_field)
+                if published_file_type_link is None:
+                    published_file_type = "No type associated"
                 else:
-                    tank_type = tank_type_link.get("name")
-                if tank_type not in tank_type_dict:
-                    tank_type_dict[tank_type] = []
-                tank_type_dict[tank_type].append(d)
+                    published_file_type = published_file_type_link.get("name")
+                published_file_type_dict.setdefault(published_file_type, list()).append(d)
              
             # and attach the raw data to the output
-            for tank_type in tank_type_dict:
+            for published_file_type in published_file_type_dict:
                 item = {}
-                item["type"] = tank_type
-                item["raw_data"] = tank_type_dict[tank_type]
+                item["type"] = published_file_type
+                item["raw_data"] = published_file_type_dict[published_file_type]
                 sg_data.append(item)
             
-            
-            
         else:
-            # get list of specific tank types            
-            for tank_type in types_to_load:            
+            # get list of specific published file types            
+            for published_file_type in types_to_load:            
                 item = {}
-                item["type"] = tank_type
-                tank_type_entity = self._app.shotgun.find_one("TankType", 
-                                                              [["code", "is", tank_type],
-                                                               ["project", "is", self._app.context.project]],
-                                                              ["code", "id"])
-                if tank_type_entity is None:
+                item["type"] = published_file_type
+                
+                pf_type_filters = [["code", "is", published_file_type]]
+                if published_file_type_entity_type == "TankType":
+                    pf_type_filters = pf_type_filters + ["project", "is", self._app.context.project]
+                
+                published_file_type_entity = self._app.shotgun.find_one(published_file_type_entity_type, pf_type_filters, ["code", "id"])
+                
+                if published_file_type_entity is None:
                     # unknown tank type!
                     item["raw_data"] = []
                 else:
-                    extended_filters = filters + [["tank_type", "is", tank_type_entity ]]
-                    item["raw_data"] = self._app.shotgun.find("TankPublishedFile", extended_filters, fields, order_by)
+                    extended_filters = filters + [[published_file_type_field, "is", published_file_type_entity ]]
+                    item["raw_data"] = self._app.shotgun.find(published_file_entity_type, extended_filters, fields, order_by)
+                    
                 sg_data.append(item)
             
         if self._app.get_setting("dependency_mode"):
