@@ -39,13 +39,13 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
 
         # get details about the published file entity:
         published_file_entity_type = tank.util.get_published_file_entity_type(self._app.tank)
-        if published_file_entity_type == "TankPublishedFile":
-            published_file_type_field = "tank_type"
-            published_file_type_entity_type = "TankType"
-        elif published_file_entity_type == "PublishedFile":
+        if published_file_entity_type == "PublishedFile":
             published_file_type_field = "published_file_type"
             published_file_type_entity_type = "PublishedFileType"
-        
+        else:# == "TankPublishedFile"
+            published_file_type_field = "tank_type"
+            published_file_type_entity_type = "TankType"
+            
         fields = [ "description", 
                    "version_number", 
                    "created_by",
