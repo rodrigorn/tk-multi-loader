@@ -84,7 +84,7 @@ class PublishBrowserWidget(browser_widget.BrowserWidget):
                 
                 pf_type_filters = [["code", "is", published_file_type]]
                 if published_file_type_entity_type == "TankType":
-                    pf_type_filters = pf_type_filters + ["project", "is", self._app.context.project]
+                    pf_type_filters.extend([["project", "is", self._app.context.project]])
                 
                 published_file_type_entity = self._app.shotgun.find_one(published_file_type_entity_type, pf_type_filters, ["code", "id"])
                 
