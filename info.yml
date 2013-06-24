@@ -9,7 +9,7 @@ configuration:
     menu_name:
         type: str
         default_value: "Load Objects..."
-        description: Name to appear on the Tank menu.
+        description: Name to appear on the Shotgun menu.
 
     dependency_mode:
         type: bool
@@ -53,8 +53,8 @@ configuration:
 
     tank_types:
         type: list
-        description: "List of Tank Types to include in the publish listings. Leaving the list
-                      empty will include all Tank Types."
+        description: "List of Published file types to include in the publish listings. Leaving the list
+                      empty will include all types."
         allows_empty: True
         values:
             type: tank_type
