@@ -11,6 +11,16 @@ configuration:
         default_value: "Load Objects..."
         description: Name to appear on the Shotgun menu.
 
+    title_name:
+        type: str
+        default_value: "Add items to your Scene"
+        description: Name to appear on the title of the UI Dialog.
+
+    button_name:
+        type: str
+        default_value: "Load Selected Item"
+        description: Name to appear on the load button.
+
     dependency_mode:
         type: bool
         default_value: false

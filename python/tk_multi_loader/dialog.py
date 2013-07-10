@@ -68,6 +68,9 @@ class AppDialog(QtGui.QWidget):
         else:
             self.ui.right_browser.set_label("Versions")
         
+        # set the caption on the load button
+        self.ui.load_selected.setText( self._app.get_setting("button_name") )
+        
         self.toggle_load_button_enabled()
         self.ui.load_selected.clicked.connect( self.load_item )
         self.ui.close.clicked.connect( self.close )
