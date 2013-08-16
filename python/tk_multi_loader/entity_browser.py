@@ -64,7 +64,10 @@ class EntityBrowserWidget(browser_widget.BrowserWidget):
             # and project of course
             filters.append(["project", "is", self._app.context.project])
             
-            item["data"] = self._app.shotgun.find(et, filters, ["code", "description", "image"])
+            item["data"] = self._app.shotgun.find(et, 
+                                                  filters, 
+                                                  ["code", "description", "image"],
+                                                  [{"field_name": "code", "direction": "asc"}])
             
             sg_data.append(item)
             
