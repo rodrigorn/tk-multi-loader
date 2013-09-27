@@ -55,18 +55,6 @@ class AppDialog(QtGui.QWidget):
             
         self.ui.left_browser.set_label(types_str)
 
-        # configure the "Show only current" checkbox
-        if self._app.context.entity is None:
-            # only show checkbox if there is a entity present in the context
-            self.ui.show_current_checkbox.setVisible(False)
-        elif self._app.context.entity.get("type") not in types_to_load:
-            # context entity is not in the list of entity types to display
-            self.ui.show_current_checkbox.setVisible(False)
-        else:
-            ctx_type = self._app.context.entity.get("type")
-            self.ui.show_current_checkbox.stateChanged.connect(self.toggle_show_only_context)
-            self.ui.show_current_checkbox.setText("Show only current %s" % ctx_type)
-
         self.ui.middle_browser.set_label("Publishes")
         
         if self._app.get_setting("dependency_mode"):
@@ -92,14 +80,41 @@ class AppDialog(QtGui.QWidget):
         # load data from shotgun
         # this qsettings stuff seems super flaky on different platforms
         prev_selection = {}
+        show_only_current = False
         try:            
             type_key = "%s/curr_entity_type" % self._app.get_setting("menu_name")
             id_key = "%s/curr_entity_id" % self._app.get_setting("menu_name")
-            entity_id = self._settings.value(id_key)
-            entity_type = str(self._settings.value(type_key))
-            prev_selection = {"type": entity_type, "id": entity_id}
+            current_key = "%s/only_show_current" % self._app.get_setting("menu_name")
+            
+            if self._settings.value(id_key) and self._settings.value(type_key):
+                # we have a stored setting 
+                entity_id = int(self._settings.value(id_key))
+                entity_type = str(self._settings.value(type_key))
+                prev_selection = {"type": entity_type, "id": entity_id}
+                        
+            if self._settings.value(current_key): 
+                # belt and braces for pyqt/pyside nuts casting
+                show_only_current = bool(int(self._settings.value(current_key)))
+            
         except Exception, e:
-            self._app.log_warning("Cannot restore previous task state: %s" % e)
+            self._app.log_warning("Cannot restore previous settings: %s" % e)
+        
+        # and push settings down to the UI
+        self.ui.show_current_checkbox.setChecked(show_only_current)
+        self.ui.left_browser.set_show_only_current(show_only_current)
+                
+        # configure the "Show only current" checkbox
+        if self._app.context.entity is None:
+            # only show checkbox if there is a entity present in the context
+            self.ui.show_current_checkbox.setVisible(False)
+        elif self._app.context.entity.get("type") not in types_to_load:
+            # context entity is not in the list of entity types to display
+            self.ui.show_current_checkbox.setVisible(False)
+        else:
+            ctx_type = self._app.context.entity.get("type")
+            self.ui.show_current_checkbox.stateChanged.connect(self.toggle_show_only_context)
+            self.ui.show_current_checkbox.setText("Show only current %s" % ctx_type)
+        
         
         self.setup_entity_list(prev_selection)
         
@@ -128,7 +143,14 @@ class AppDialog(QtGui.QWidget):
             self.ui.load_selected.setEnabled(True)
 
     def toggle_show_only_context(self):
-        self.ui.left_browser.set_show_only_current(self.ui.show_current_checkbox.isChecked())
+
+        only_show_current = self.ui.show_current_checkbox.isChecked()
+        self.ui.left_browser.set_show_only_current(only_show_current)
+        
+        # remember selection in settings
+        current_key = "%s/only_show_current" % self._app.get_setting("menu_name")
+        self._settings.setValue(current_key, int(only_show_current))
+        
         self.ui.left_browser.clear()
         self.ui.middle_browser.clear()
         self.ui.right_browser.clear()
