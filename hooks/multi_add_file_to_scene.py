@@ -37,7 +37,10 @@ class AddFileToScene(tank.Hook):
             
         elif engine_name == "tk-3dsmax":
             self.add_file_to_3dsmax(file_path, shotgun_data)
-            
+
+        elif engine_name == "tk-3dsmax-plus":
+            self.add_file_to_3dsmax_plus(file_path, shotgun_data)
+
         elif engine_name == "tk-photoshop":
             self.add_file_to_photoshop(file_path, shotgun_data)
 
@@ -175,7 +178,19 @@ class AddFileToScene(tank.Hook):
             self.parent.log_error("The file %s does not exist." % file_path)
         else:
             mxs.importFile(file_path)
-        
+
+    def add_file_to_3dsmax_plus(self, file_path, shotgun_data):
+        """
+        Load item into 3dsmax.
+
+        This will attempt to merge the loaded file with the scene.
+        """
+        import MaxPlus
+        if not os.path.exists(file_path):
+            self.parent.log_error("The file %s does not exist." % file_path)
+        else:
+            MaxPlus.FileManager.Import(file_path)
+
     def add_file_to_photoshop(self, file_path, shotgun_data):
         """
         Load item into Photoshop.        
