@@ -39,20 +39,39 @@ class MultiLoader(tank.platform.Application):
         :returns: list of resolved filters    
         """
         resolved_filters = []
-        for filter in filters:
-            resolved_filter = []
-            for field in filter:
-                if field == "{context.entity}":
-                    field = self.context.entity
-                elif field == "{context.project}":
-                    field = self.context.project
-                elif field == "{context.step}":
-                    field = self.context.step
-                elif field == "{context.task}":
-                    field = self.context.task
-                elif field == "{context.user}":
-                    field = self.context.user                    
-                resolved_filter.append(field)
-            resolved_filters.append(resolved_filter)
-            
+        for current_filter in filters:
+            if type(current_filter) == type(dict()):
+                swapped_filters = []
+                for complex_filter in current_filter.get('filters'):
+                    swapped_filter = \
+                        self.__swap_entity_descriptors(complex_filter)
+                    swapped_filters.append(swapped_filter)
+                # end for
+                current_filter['filters'] = swapped_filters
+            else:
+                current_filter = self.__swap_entity_descriptors(current_filter)
+            # end if
+            resolved_filters.append(current_filter)
+        # end for
         return resolved_filters
+    # end resolve_filter_template_fields
+
+    def __swap_entity_descriptors(self, current_filter):
+        resolved_filter = []
+        for field in current_filter:
+            if field == "{context.entity}":
+                field = self.context.entity
+            elif field == "{context.project}":
+                field = self.context.project
+            elif field == "{context.step}":
+                field = self.context.step
+            elif field == "{context.task}":
+                field = self.context.task
+            elif field == "{context.user}":
+                field = self.context.user
+            # end if
+            resolved_filter.append(field)
+        # end for
+            
+        return resolved_filter
+    # end __swap_entity_descriptors
